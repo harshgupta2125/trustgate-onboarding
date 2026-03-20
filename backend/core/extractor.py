@@ -13,7 +13,7 @@ def extract_text_from_pdf(file_path: str) -> str:
     try:
         with fitz.open(file_path) as doc:
             for page in doc:
-                text += page.get_text()
+                text += str(page.get_text())
     except Exception as e:
         print(f"Error reading PDF: {e}")
     return text
@@ -21,7 +21,7 @@ def extract_text_from_pdf(file_path: str) -> str:
 def extract_text_from_image(file_path: str) -> str:
     """Opens an image and uses OCR to extract text."""
     try:
-        image = Image.open(file_path)
+        image = Image.open(file_path).convert('L')       
         text = pytesseract.image_to_string(image)
         return text
     except Exception as e:
