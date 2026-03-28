@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the local storage to the host machine for data persistence
+      - ./backend/local_storage:/app/local_storage
+    environment:
+      # Tell FastAPI where the frontend is coming from for CORS
+      - FRONTEND_URL=http://localhost:5173
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      # Map our local port 5173 to Nginx's internal port 80
+      - "5173:80"
+    depends_on:
+      - backend
